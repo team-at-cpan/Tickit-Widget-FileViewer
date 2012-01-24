@@ -3,6 +3,8 @@ package Tickit::Widget::FileViewer;
 use strict;
 use warnings;
 use parent qw(Tickit::Widget);
+
+use Tickit::Utils qw(substrwidth);
 use List::Util qw(min max);
 use Text::Tabs ();
 
@@ -154,19 +156,20 @@ sub render {
 
 	my $line = $self->top_line;
 	my @line_data = @{$self->{file_content}}[$line .. min($line + $win->lines, $#{$self->{file_content}})];
+
+	# FIXME '7'? Is use constant on holiday?
 	my $w = $win->cols - 7;
 	for my $row ($args{top}..($args{top} + $args{lines} - 1)) {
 		$win->goto($row, 0);
 		if(@line_data) {
 			# FIXME not unicode-safe
-			my $txt = sprintf "%-" . $w . '.' . $w . 's', Text::Tabs::expand(shift @line_data);
+			my $txt = substrwidth(Text::Tabs::expand(shift @line_data), 0, $w);
 			$self->render_line_number($line);
 			$self->render_line_data($line, $txt);
-			++$line;
 		} else {
-			$win->erasech($win->cols);
-			next;
+			$win->erasech($win->cols, 1);
 		}
+		++$line;
 	}
 }
 
@@ -277,11 +280,21 @@ sub top_line {
 
 __END__
 
+=head1 SEE ALSO
+
+=over 4
+
+=item * L<Tickit::Widget::Scroller> - support for scrollable list of widgets, generally much cleaner and
+flexible than this implementation, and could easily provide similar functionality if the line number and
+code for each line are wrapped in another widget
+
+=back
+
 =head1 AUTHOR
 
 Tom Molesworth <cpan@entitymodel.com>
 
 =head1 LICENSE
 
-Copyright Tom Molesworth 2011. Licensed under the same terms as Perl itself.
+Copyright Tom Molesworth 2011-2012. Licensed under the same terms as Perl itself.
 
