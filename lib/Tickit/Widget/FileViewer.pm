@@ -185,10 +185,9 @@ L</handle_text> as appropriate.
 =cut
 
 sub on_key {
-	my $self = shift;
-	my ($type, $key, $obj) = @_;
-	return $self->handle_key($key) if $type eq 'key';
-	return $self->handle_text($key) if $type eq 'text';
+	my ($self, $ev) = @_;
+	return $self->handle_key($ev->str) if $ev->type eq 'key';
+	return $self->handle_text($ev->str) if $ev->type eq 'text';
 	die "wtf is @_ ?\n";
 }
 
