@@ -8,7 +8,7 @@ use Tickit::Utils qw(substrwidth);
 use List::Util qw(min max);
 use Text::Tabs ();
 
-our $VERSION = '0.001';
+our $VERSION = '0.002';
 
 =head1 NAME
 
@@ -141,7 +141,7 @@ sub render_to_rb {
 			$self->render_line_number($rb, $rect, $row, $line);
 			$self->render_line_data($rb, $rect, $row, $line, $txt);
 		} else {
-			$rb->erase_to($rb->right, $self->get_style_pen);
+			$rb->erase_at($row, $rect->left, $rect->cols, $self->get_style_pen);
 		}
 		++$line;
 	}
