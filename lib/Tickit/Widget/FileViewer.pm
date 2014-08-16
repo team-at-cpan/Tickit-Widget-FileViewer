@@ -97,38 +97,6 @@ sub load_file {
 	$self;
 }
 
-=head2 render_line_number
-
-Renders the given (zero-based) line number at the current
-cursor position.
-
-Subclasses should override this to provide styling as required.
-
-=cut
-
-sub render_line_number {
-	my $self = shift;
-	my $win = $self->window or return;
-	my $line = shift;
-	$win->print(sprintf("%6d ", $line + 1), fg => 6);
-}
-
-=head2 render_line_data
-
-Renders the given line text at the current cursor position.
-
-Subclasses should override this to provide styling as required.
-
-=cut
-
-sub render_line_data {
-	my $self = shift;
-	my $win = $self->window or return;
-	my ($line, $txt) = @_;
-	my %attr = $self->line_attributes($line, $txt);
-	$win->print($txt, %attr);
-}
-
 =head2 line_attributes
 
 Given a zero-based line number and line text, returns the attributes
@@ -148,39 +116,66 @@ sub line_attributes {
 	return %attr;
 }
 
-=head2 render
+=head2 render_to_rb
 
 Render this widget. Will call L</render_line_data> and L</render_line_number>
 to do the actual drawing.
 
-Takes the usual top/left/etc. named parameters to indicate the area
-of the window that needs redrawing.
-
 =cut
 
-sub render {
-	my $self = shift;
+sub render_to_rb {
+	my ($self, $rb, $rect) = @_;
 	my $win = $self->window or return;
-	my %args = @_;
 
-	my $line = $self->top_line;
-	my @line_data = @{$self->{file_content}}[$line .. min($line + $win->lines, $#{$self->{file_content}})];
+	my $line = $rect->top + $self->top_line;
+	my @line_data = @{$self->{file_content}}[$line .. min($line + $rect->lines, $#{$self->{file_content}})];
 
 	# FIXME '7'? Is constant.pm on holiday?
 	my $w = $win->cols - 7;
-	for my $row ($args{top}..($args{top} + $args{lines} - 1)) {
-		$win->goto($row, 0);
+	for my $row ($rect->linerange) {
 		if(@line_data) {
-			# FIXME not unicode-safe
+			# FIXME is this unicode-safe? probably not
 			my $txt = substrwidth(Text::Tabs::expand(shift @line_data), 0, $w);
-			$self->render_line_number($line);
-			$self->render_line_data($line, $txt);
+		# $rb->goto($row, $);
+			$self->render_line_number($rb, $rect, $row, $line);
+			$self->render_line_data($rb, $rect, $row, $line, $txt);
 		} else {
-			$win->erasech($win->cols, 1);
+			$rb->erase_to($rb->right, $self->get_style_pen);
 		}
 		++$line;
 	}
 }
+
+=head2 render_line_number
+
+Renders the given (zero-based) line number at the current
+cursor position.
+
+Subclasses should override this to provide styling as required.
+
+=cut
+
+sub render_line_number {
+	my ($self, $rb, $rect, $row, $line) = @_;
+	my $win = $self->window or return;
+	$rb->text_at($row, 0, sprintf("%6d ", $line + 1), $self->get_style_pen('line'));
+}
+
+=head2 render_line_data
+
+Renders the given line text at the current cursor position.
+
+Subclasses should override this to provide styling as required.
+
+=cut
+
+sub render_line_data {
+	my ($self, $rb, $rect, $row, $line, $txt) = @_;
+	my $win = $self->window or return;
+	my $pen = Tickit::Pen->new($self->line_attributes($line, $txt));
+	$rb->text_at($row, 7, $txt, $pen);
+}
+
 
 =head2 on_key
 
