@@ -1,6 +1,10 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+	No new features
+
+	Bugs fixed:
+	* Fix blank line rendering
 
 0.001     2014-08-16 04:01:01+01:00 Europe/London
 	Initial CPAN release
