@@ -157,7 +157,7 @@ sub render {
 	my $line = $self->top_line;
 	my @line_data = @{$self->{file_content}}[$line .. min($line + $win->lines, $#{$self->{file_content}})];
 
-	# FIXME '7'? Is use constant on holiday?
+	# FIXME '7'? Is constant.pm on holiday?
 	my $w = $win->cols - 7;
 	for my $row ($args{top}..($args{top} + $args{lines} - 1)) {
 		$win->goto($row, 0);
@@ -296,5 +296,5 @@ Tom Molesworth <cpan@entitymodel.com>
 
 =head1 LICENSE
 
-Copyright Tom Molesworth 2011-2012. Licensed under the same terms as Perl itself.
+Copyright Tom Molesworth 2011-2014. Licensed under the same terms as Perl itself.
 
