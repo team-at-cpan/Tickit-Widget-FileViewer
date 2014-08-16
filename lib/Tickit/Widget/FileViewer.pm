@@ -26,6 +26,15 @@ Tickit::Widget::FileViewer - support for viewing files in L<Tickit>.
  $loop->add($tickit);
  $tickit->run;
 
+=cut
+
+use Tickit::Style;
+
+BEGIN {
+	style_definition base =>
+		line_fg => 6;
+}
+
 =head1 METHODS
 
 =cut
