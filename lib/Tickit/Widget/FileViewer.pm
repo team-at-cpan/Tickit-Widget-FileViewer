@@ -18,6 +18,7 @@ Tickit::Widget::FileViewer - support for viewing files in L<Tickit>.
 
  use Tickit::Async;
  use Tickit::Widget::FileViewer;
+ my $tickit = Tickit::Async->new;
  my $viewer = Tickit::Widget::FileViewer->new(
    file => 'somefile.txt',
  );
