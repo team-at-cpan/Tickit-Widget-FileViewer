@@ -8,7 +8,7 @@ use Tickit::Utils qw(substrwidth);
 use List::Util qw(min max);
 use Text::Tabs ();
 
-our $VERSION = '0.002';
+our $VERSION = '0.003';
 
 =head1 NAME
 
@@ -68,6 +68,8 @@ Takes the following named parameters:
 
 =item * file - the file to load
 
+=item * line - which line to jump to
+
 =back
 
 =cut
@@ -77,6 +79,9 @@ sub configure {
 	my %args = @_;
 	if(my $file = delete $args{file}) {
 		$self->load_file($file);
+	}
+	if(defined(my $line = delete $args{line})) {
+		$self->cursor_line($line);
 	}
 	$self;
 }
@@ -136,6 +141,7 @@ sub render_to_rb {
 	for my $row ($rect->linerange) {
 		if(@line_data) {
 			# FIXME is this unicode-safe? probably not
+			local $Text::Tabs::tabstop = 4;
 			my $txt = substrwidth(Text::Tabs::expand(shift @line_data), 0, $w);
 		# $rb->goto($row, $);
 			$self->render_line_number($rb, $rect, $row, $line);
@@ -296,7 +302,7 @@ code for each line are wrapped in another widget
 
 =head1 AUTHOR
 
-Tom Molesworth <cpan@entitymodel.com>
+Tom Molesworth <cpan@perlsite.co.uk>
 
 =head1 LICENSE
 
