@@ -11,7 +11,7 @@ use ExtUtils::MakeMaker 6.48;
 
 my %WriteMakefileArgs = (
   "ABSTRACT" => "Simple file-viewing widget for Tickit",
-  "AUTHOR" => "Tom Molesworth <cpan\@entitymodel.com>",
+  "AUTHOR" => "Tom Molesworth <cpan\@perlsite.co.uk>",
   "CONFIGURE_REQUIRES" => {
     "ExtUtils::MakeMaker" => "6.48"
   },
@@ -32,7 +32,7 @@ my %WriteMakefileArgs = (
     "Test::CheckDeps" => "0.010",
     "Test::More" => "0.98"
   },
-  "VERSION" => "0.002",
+  "VERSION" => "0.003",
   "test" => {
     "TESTS" => "t/*.t"
   }
