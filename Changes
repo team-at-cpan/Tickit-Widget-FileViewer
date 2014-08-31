@@ -1,6 +1,11 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+	This release changes the default tabstop to 4. Ideally it should be
+	configurable, but it isn't.
+
+	Features:
+	* Support jump-to-line via ->configure
 
 0.002     2014-08-16 04:25:13+01:00 Europe/London
 	No new features
