@@ -8,7 +8,7 @@ use Tickit::Utils qw(substrwidth);
 use List::Util qw(min max);
 use Text::Tabs ();
 
-our $VERSION = '0.003';
+our $VERSION = '0.004';
 
 =head1 NAME
 
@@ -222,6 +222,18 @@ sub cursor_line {
 		return $self;
 	}
 	return $self->{cursor_line};
+}
+
+sub window_gained {
+	my ($self, $win) = @_;
+	$self->SUPER::window_gained($win);
+	my $line = $self->cursor_line;
+	if($line < $self->top_line) {
+		$self->top_line($line);
+	} elsif($line >= $self->top_line + $win->lines) {
+		$self->top_line($line - ($win->lines - 1));
+	}
+	$self->redraw;
 }
 
 =head2 handle_key
