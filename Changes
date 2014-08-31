@@ -1,6 +1,8 @@
 Revision history for {{$dist->name}}
 
 {{$NEXT}}
+
+0.003     2014-08-31 02:45:57+01:00 Europe/London
 	This release changes the default tabstop to 4. Ideally it should be
 	configurable, but it isn't.
 
