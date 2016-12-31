@@ -52,11 +52,11 @@ named parameters to L</configure>.
 =cut
 
 sub new {
-	my $self = shift->SUPER::new;
-	my %args = @_;
+	my ($class, %args) = @_;
+	my $self = $class->SUPER::new;
 	$self->{top_line} = 0;
 	$self->{cursor_line} = 0;
-	$self->configure(%args);
+	$self->configure(%args) if %args;
 	$self
 }
 
@@ -75,8 +75,7 @@ Takes the following named parameters:
 =cut
 
 sub configure {
-	my $self = shift;
-	my %args = @_;
+	my ($self, %args) = @_;
 	if(my $file = delete $args{file}) {
 		$self->load_file($file);
 	}
@@ -314,7 +313,7 @@ code for each line are wrapped in another widget
 
 =head1 AUTHOR
 
-Tom Molesworth <cpan@perlsite.co.uk>
+Tom Molesworth <TEAM@cpan.org>
 
 =head1 LICENSE
 
